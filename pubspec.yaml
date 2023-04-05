@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  simple_http_api: ^1.1.0
+  simple_http_api: ^1.1.1
 
 dev_dependencies:
   flutter_test:

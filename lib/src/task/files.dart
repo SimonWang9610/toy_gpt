@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:path/path.dart';
 
 import 'package:simple_http_api/simple_http_api.dart';
 import 'package:toy_gpt/toy_gpt.dart';
@@ -27,17 +28,15 @@ class FileTask {
   static Future<FileUnit> uploadFromPath({
     required String purpose,
     required String filePath,
-    String? filename,
-    int? length,
     bool useIsolate = false,
   }) async {
     final file = await FormData.fileFromPath(
       filePath,
       field: _field,
-      filename: filename,
+      filename: basename(filePath),
     );
 
-    return await _upload(
+    return _upload(
       purpose: purpose,
       file: file,
       useIsolate: useIsolate,
@@ -50,6 +49,7 @@ class FileTask {
       options: OpenAI.instance.connectionOption,
       headers: OpenAI.instance.headers,
     );
+    if (res.statusCode != 200) throw Exception(res.body);
 
     return json.decode(res.body);
   }
@@ -60,6 +60,8 @@ class FileTask {
       options: OpenAI.instance.connectionOption,
       headers: OpenAI.instance.headers,
     );
+
+    if (res.statusCode != 200) throw Exception(res.body);
 
     return FileUnit.fromJson(res.body);
   }
@@ -96,6 +98,8 @@ class FileTask {
         headers: OpenAI.instance.headers,
         useIsolate: useIsolate,
       );
+
+      if (res.statusCode != 200) throw Exception(res.body);
 
       return FileUnit.fromJson(res.body);
     } catch (e) {

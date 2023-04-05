@@ -9,22 +9,25 @@ import 'package:toy_gpt/src/task/image.dart';
 import 'package:toy_gpt/src/task/moderation.dart';
 import 'package:toy_gpt/toy_gpt.dart';
 
+import '../key.dart';
+
 void main() async {
-  const String apiKey = "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";
+  OpenAI.instance.setAuth(key);
 
-  OpenAI.instance.setAuth(apiKey);
+  const template = 'write a chinese poem. do not translate it.';
 
-  final transcript = TranscriptionParams(format: AudioResponseFormat.srt);
-  final translation = TranslationParams(format: AudioResponseFormat.text);
+  final completion = await CompletionTask.asyncChat(
+    messages: [
+      {"role": "user", "content": template}
+    ],
+    params: ChatCompletionParams(maxTokens: 1024),
+  );
 
-  try {
-    final res = await ModerationTask.create(
-      input: "I hate you",
-    );
+  String answer = "";
 
-    print(res);
-  } catch (e, s) {
-    print(e);
-    print(s);
-  }
+  completion.choices.forEach((element) {
+    answer += element.body;
+  });
+
+  print(answer);
 }

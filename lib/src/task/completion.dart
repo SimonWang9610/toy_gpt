@@ -26,6 +26,7 @@ class CompletionTask {
       body: json.encode(data),
       headers: OpenAI.instance.headers,
       options: OpenAI.instance.connectionOption,
+      responseEncoding: utf8,
     );
 
     if (res.statusCode != 200) throw Exception(res.body);
@@ -48,6 +49,7 @@ class CompletionTask {
       body: json.encode(data),
       headers: OpenAI.instance.headers,
       options: OpenAI.instance.connectionOption,
+      responseEncoding: utf8,
     );
 
     if (res.statusCode != 200) throw Exception(res.body);

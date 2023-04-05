@@ -47,7 +47,11 @@ class ImageTask {
       formData.addFile(maskFile);
     }
 
-    formData.addFields(params.toMap());
+    final fields = params.toMap().map((key, value) {
+      return MapEntry(key, value.toString());
+    });
+
+    formData.addFields(fields);
 
     final res = await Api.upload(
       OpenAI.getUri("/images/edits"),
@@ -72,7 +76,11 @@ class ImageTask {
     );
 
     final formData = FormData();
-    formData.addFields(params.toMap());
+    final fields = params.toMap().map((key, value) {
+      return MapEntry(key, value.toString());
+    });
+    formData.addFields(fields);
+
     formData.addFile(imageFile);
 
     final res = await Api.upload(
